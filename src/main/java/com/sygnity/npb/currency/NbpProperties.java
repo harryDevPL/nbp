@@ -1,17 +1,22 @@
-package com.sygnity.npb.service;
+package com.sygnity.npb.currency;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "nbp.http")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
-class NbpProperties {
+@Data
+class NbpProperties implements ClientProperties {
 
     private String baseUrl;
+
+    @Override
+    public String getBaseUrl() {
+        return baseUrl;
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package com.sygnity.npb.service;
+package com.sygnity.npb.currency;
 
 import lombok.*;
 
@@ -14,11 +14,6 @@ class NbpCurrencyResponse {
     private String currency;
     private String code;
     private List<Rate> rates;
-    private ResponseException responseException;
-
-    public NbpCurrencyResponse(ResponseException responseException) {
-        this.responseException = responseException;
-    }
 
     @Builder
     @Getter

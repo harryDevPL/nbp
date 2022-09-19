@@ -1,4 +1,4 @@
-package com.sygnity.npb.model;
+package com.sygnity.npb.currency;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Currency {
+class CurrencyEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

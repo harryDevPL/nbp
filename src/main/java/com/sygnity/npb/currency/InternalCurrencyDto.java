@@ -1,4 +1,4 @@
-package com.sygnity.npb.service;
+package com.sygnity.npb.currency;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 @Data
-class CurrencyDto {
+class InternalCurrencyDto {
     private final String currencyCode;
     private final String rate;
     private final String date;
