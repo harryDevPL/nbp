@@ -10,9 +10,9 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
+@Slf4j
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Slf4j
 class SimpleCurrencyRateProvider implements CurrencyRateProvider {
 
     private static final String PATTERN_FORMAT = "yyyy-MM-dd";
@@ -21,30 +21,24 @@ class SimpleCurrencyRateProvider implements CurrencyRateProvider {
             .withZone(ZoneId.systemDefault());
 
     CurrencyRepository repository;
-    CurrencyProvider provider;
+    CurrencyFetcher fetcher;
 
     @Override
-    public InternalCurrencyDto getCurrency(
-            final String currencyCode,
-            final String date
-    ) {
+    public InternalCurrencyDto getRate(final String currencyCode, final String date) {
         val currencyOptional = repository.findByCurrencyCodeAndDate(currencyCode, date);
 
-        if (currencyOptional.isPresent()) {
-            log.info("Currency: {} found id database", currencyCode);
-            return mapToDto(currencyOptional.get());
-        } else {
-            log.info("Currency: {} not found id database", currencyCode);
-            return getCurrencyFromNbp(currencyCode, date);
-        }
+        return mapToDto(currencyOptional.orElseGet(
+                () -> getCurrencyFromNbp(currencyCode, date)
+        ));
     }
 
-    private InternalCurrencyDto getCurrencyFromNbp(String currencyCode, String date) {
-        val currencyDto = provider.provide(currencyCode, date);
+    private CurrencyEntity getCurrencyFromNbp(final String currencyCode, final String date) {
+        log.info("Currency: {} not found id database for date: {}", currencyCode, date);
+
+        val currencyDto = fetcher.fetch(currencyCode, date);
         log.info("Currency: {} rate fetched from NBP API", currencyCode);
 
-        repository.saveAndFlush(mapToEntity(currencyDto));
-        return currencyDto;
+        return repository.saveAndFlush(mapToEntity(currencyDto));
     }
 
     private CurrencyEntity mapToEntity(InternalCurrencyDto internalCurrencyDto) {

@@ -12,7 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @Slf4j
-class NbpCurrencyProvider implements CurrencyProvider {
+class NbpCurrencyFetcher implements CurrencyFetcher {
 
     private static final String SLASH = "/";
     private static final String TABLE_C = "c";
@@ -21,7 +21,7 @@ class NbpCurrencyProvider implements CurrencyProvider {
     ClientProperties properties;
 
     @Override
-    public InternalCurrencyDto provide(final String currencyCode, final String date) {
+    public InternalCurrencyDto fetch(final String currencyCode, final String date) {
         log.info("Fetching {} from {}", currencyCode, date);
         try {
             val response = webClient.get()
@@ -32,7 +32,7 @@ class NbpCurrencyProvider implements CurrencyProvider {
                     })
                     .bodyToMono(NbpCurrencyResponse.class)
                     .block();
-            return mapResponseToCurrency(response);
+            return mapToDto(response);
         } catch (final ResponseStatusException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
@@ -41,7 +41,7 @@ class NbpCurrencyProvider implements CurrencyProvider {
         }
     }
 
-    private InternalCurrencyDto mapResponseToCurrency(final NbpCurrencyResponse response) {
+    private InternalCurrencyDto mapToDto(final NbpCurrencyResponse response) {
         if (response == null) {
             throw new IllegalArgumentException("Nbp response is null. Trace id: ...");
         }

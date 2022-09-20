@@ -11,30 +11,41 @@ import org.springframework.web.reactive.function.client.WebClient;
 @EnableJpaRepositories
 class CurrencyConfiguration {
 
+    // only for test purpose! do not use it on production!
+    CurrencyRepository inMemoryCurrencyRepository() {
+        return new InMemoryCurrencyRepository();
+    }
+
+    // only for test purpose! do not use it on production!
+    CurrencyFetcher dummyCurrencyFetcher() {
+        return new DummyCurrencyFetcher();
+    }
+
     @Bean
     ClientProperties nbpProperties() {
         return new NbpProperties();
     }
 
     @Bean
-    CurrencyFacade currencyFacade(CurrencyRateProvider rateProvider, RequestValidator validator) {
-        return new SimpleCurrencyFacade(rateProvider, validator);
+    CurrencyFacade currencyFacade(final CurrencyService service) {
+        return new CurrencyFacade(service);
     }
 
     @Bean
-    CurrencyRateProvider currencyRateProvider(CurrencyRepository repository, CurrencyProvider fetcher) {
+    CurrencyRateProvider currencyRateProvider(final CurrencyRepository repository, final CurrencyFetcher fetcher) {
         return new SimpleCurrencyRateProvider(repository, fetcher);
     }
 
     @Bean
-    CurrencyProvider currencyFetcher(WebClient webClient, ClientProperties properties) {
-        return new NbpCurrencyProvider(webClient, properties);
+    CurrencyFetcher currencyFetcher(final WebClient webClient, final ClientProperties properties) {
+        return new NbpCurrencyFetcher(webClient, properties);
     }
 
     @Bean
-    RequestValidator requestValidator() {
-        return new ExchangeRateRequestValidator();
+    CurrencyService currencyService(final CurrencyRateProvider rateProvider) {
+        return new SimpleCurrencyService(rateProvider);
     }
+
 
     @Bean
     public WebClient webClient() {

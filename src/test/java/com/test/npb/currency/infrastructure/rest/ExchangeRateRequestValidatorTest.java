@@ -1,4 +1,4 @@
-package com.test.npb.currency;
+package com.test.npb.currency.infrastructure.rest;
 
 import com.test.npb.currency.dto.ExchangeCurrencyRequest;
 import lombok.val;

@@ -12,29 +12,28 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Slf4j
 @AllArgsConstructor
 @FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
-@Slf4j
-class SimpleCurrencyFacade implements CurrencyFacade {
+class SimpleCurrencyService implements CurrencyService {
 
     CurrencyRateProvider currencyRateProvider;
 
-    RequestValidator validator;
-
     @Override
     public ExchangeCurrencyResponse getExchangeRate(final @Valid ExchangeCurrencyRequest request) {
-        validator.validate(request);
-
         val sendingCurrency = request.getSendingCurrency();
-        val sendingAmount = request.getSendingAmount();
         val receivingCurrency = request.getReceivingCurrency();
-        val date = request.getDate();
 
-        val sendingCurrencyDto = currencyRateProvider.getCurrency(sendingCurrency, date);
-        val receivingCurrencyDto = currencyRateProvider.getCurrency(receivingCurrency, date);
+        val sendingCurrencyDto = currencyRateProvider.getRate(sendingCurrency, request.getDate());
+        val receivingCurrencyDto = currencyRateProvider.getRate(receivingCurrency, request.getDate());
 
-        val receivingAmount = calculate(sendingAmount, sendingCurrencyDto.getRate(), receivingCurrencyDto.getRate());
+        val receivingAmount = calculate(
+                request.getSendingAmount(),
+                sendingCurrencyDto.getRate(),
+                receivingCurrencyDto.getRate()
+        );
         return new ExchangeCurrencyResponse(receivingCurrency, receivingAmount);
+
     }
 
     private String calculate(

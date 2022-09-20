@@ -20,11 +20,10 @@ class TestProperties {
     private String table = "C";
 
     @Builder.Default
-    private NbpCurrencyResponse.Rate rate =
-            NbpCurrencyResponse.Rate.builder()
-                    .no("182/C/NBP/2022")
-                    .effectiveDate("2022-09-20")
-                    .ask(4.7627)
-                    .bid(6683)
-                    .build();
+    private NbpCurrencyResponse.Rate rate = NbpCurrencyResponse.Rate.builder()
+            .no("182/C/NBP/2022")
+            .effectiveDate("2022-09-20")
+            .ask(4.7627)
+            .bid(6683)
+            .build();
 }

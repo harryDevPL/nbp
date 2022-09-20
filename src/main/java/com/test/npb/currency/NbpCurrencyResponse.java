@@ -1,11 +1,14 @@
 package com.test.npb.currency;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 class NbpCurrencyResponse {
@@ -15,12 +18,10 @@ class NbpCurrencyResponse {
     private String code;
     private List<Rate> rates;
 
+    @Data
     @Builder
-    @Getter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
-    @EqualsAndHashCode
+    @AllArgsConstructor
     static class Rate {
         private String no;
         private String effectiveDate;
@@ -28,12 +29,10 @@ class NbpCurrencyResponse {
         private double ask;
     }
 
+    @Data
     @Builder
-    @Getter
-    @AllArgsConstructor
     @NoArgsConstructor
-    @ToString
-    @EqualsAndHashCode
+    @AllArgsConstructor
     static class ResponseException {
         private String timestamp;
         private int status;

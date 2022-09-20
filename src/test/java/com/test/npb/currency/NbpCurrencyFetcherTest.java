@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class NbpCurrencyProviderTest {
+class NbpCurrencyFetcherTest {
 
     @Mock
     WebClient webClientMock;
@@ -46,11 +46,11 @@ class NbpCurrencyProviderTest {
     @Mock
     Mono<NbpCurrencyResponse> nbpCurrencyResponseMonoMock;
 
-    CurrencyProvider provider;
+    CurrencyFetcher provider;
 
     @BeforeEach
     void setUp() {
-        provider = new NbpCurrencyProvider(webClientMock, propertiesMock);
+        provider = new NbpCurrencyFetcher(webClientMock, propertiesMock);
     }
 
     @ParameterizedTest
@@ -73,7 +73,7 @@ class NbpCurrencyProviderTest {
         when(responseSpecOnStatusMock.bodyToMono(NbpCurrencyResponse.class)).thenReturn(nbpCurrencyResponseMonoMock);
         when(nbpCurrencyResponseMonoMock.block()).thenReturn(expectedCurrencyDto);
 
-        val currencyDto = provider.provide(expectedCurrencyCode, testProperties.getDate());
+        val currencyDto = provider.fetch(expectedCurrencyCode, testProperties.getDate());
 
         // then
         val actualCurrencyCode = currencyDto.getCurrencyCode();

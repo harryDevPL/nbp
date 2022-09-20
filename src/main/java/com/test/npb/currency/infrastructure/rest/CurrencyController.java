@@ -22,10 +22,13 @@ class CurrencyController {
 
     CurrencyFacade currencyFacade;
 
+    RequestValidator validator;
+
     @PostMapping(value = "/exchange", produces = MediaType.APPLICATION_JSON_VALUE)
     public ExchangeCurrencyResponse getCurrencyExchangeRate(
             @Valid @RequestBody ExchangeCurrencyRequest request
     ) {
+        validator.validate(request);
         return currencyFacade.getExchangeRate(request);
     }
 }
