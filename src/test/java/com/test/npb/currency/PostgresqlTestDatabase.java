@@ -9,6 +9,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @UtilityClass
 class PostgresqlTestDatabase {
 
+    // TODO: 20.09.2022 use it!
+
     public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         private static final PostgreSQLContainer<?> POSTGRESQL_CONTAINER = new PostgreSQLContainer<>("postgres:latest")

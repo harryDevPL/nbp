@@ -31,9 +31,6 @@ class NbpCurrencyProvider implements CurrencyProvider {
                         throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(EXCEPTION_MESSAGE_PATTERN, currencyCode, date));
                     })
                     .bodyToMono(NbpCurrencyResponse.class)
-//                    .onErrorMap(throwable -> {
-//                        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, String.format(EXCEPTION_MESSAGE_PATTERN, currencyCode, date));
-//                    })
                     .block();
             return mapResponseToCurrency(response);
         } catch (final ResponseStatusException e) {

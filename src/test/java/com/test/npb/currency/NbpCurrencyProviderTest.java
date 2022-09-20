@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -44,15 +43,10 @@ class NbpCurrencyProviderTest {
     @Mock
     WebClient.ResponseSpec responseSpecOnStatusMock;
 
-    @SuppressWarnings("rawtypes")
     @Mock
     Mono<NbpCurrencyResponse> nbpCurrencyResponseMonoMock;
 
-    @SuppressWarnings("rawtypes")
-    @Mock
-    Mono<NbpCurrencyResponse> nbpCurrencyResponseMonoOnErrorMapMock;
-
-    NbpCurrencyProvider provider;
+    CurrencyProvider provider;
 
     @BeforeEach
     void setUp() {
@@ -77,7 +71,6 @@ class NbpCurrencyProviderTest {
         when(requestHeadersSpecMock.retrieve()).thenReturn(responseSpecMock);
         when(responseSpecMock.onStatus(any(), any())).thenReturn(responseSpecOnStatusMock);
         when(responseSpecOnStatusMock.bodyToMono(NbpCurrencyResponse.class)).thenReturn(nbpCurrencyResponseMonoMock);
-//        when(nbpCurrencyResponseMonoMock.onErrorMap(any())).thenReturn(nbpCurrencyResponseMonoOnErrorMapMock);
         when(nbpCurrencyResponseMonoMock.block()).thenReturn(expectedCurrencyDto);
 
         val currencyDto = provider.provide(expectedCurrencyCode, testProperties.getDate());
